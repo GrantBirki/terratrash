@@ -47,6 +47,17 @@ class Terratrash
     # removing terraform plan -out note
     text.gsub!(/Note: You didn't use the -out option.*?actions if you run "terraform apply" now./m, "")
 
+    text = top_and_bottom_cleanup!(text)
+
+    return text
+  end
+
+  private
+
+  # Helper function to clean up the top and bottom of the 'output' before it is returned
+  # :input text: a string of text
+  # :return text: the same string of text, but with the top and bottom cleaned up
+  def top_and_bottom_cleanup!(text)
     # remove any leading newline(s) characters from the beginning of the string
     text.gsub!(/\A\n*/, "")
     # remove any trailing newline(s) characters from the end of the string
@@ -60,8 +71,6 @@ class Terratrash
 
     return text
   end
-
-  private
 
   # Helper function to remove Terraform warnings
   # :input text: a string of text
