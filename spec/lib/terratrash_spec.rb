@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "logger"
 require_relative "../../lib/terratrash"
+
+# a mock logger that doesn't output anything
+LOGGY = Logger.new($stdout, level: "fatal")
 
 describe Terratrash do
   context "#initialize" do
@@ -15,7 +19,7 @@ describe Terratrash do
 
   context "#clean" do
     it "makes no changes to a very simple string" do
-      expect(described_class.new.clean("foo")).to eq("foo")
+      expect(described_class.new(logger: LOGGY).clean("foo")).to eq("foo")
     end
   end
 end
