@@ -1,0 +1,66 @@
+[command]/home/runner/work/_temp/123-546-789/terraform-bin plan -no-color
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
++ create
+
+Terraform will perform the following actions:
+
+# module.cafe.module.coffee["roasts"].beans.brew will be created
++ resource "cafe" "location" {
+  + location                      = "space"
+  + details                       = [
+      + jsonencode(
+            {
+              + coffee  = {
+                  + cold_brew = "yum"
+                  + types            = [
+                      + "dark",
+                    ]
+                }
+              + food = {
+                  + bagels        = "yes"
+                  + sandwiches    = "yes"
+                }
+            }
+        ),
+    ]
+  + seating                 = "tables"
+  + post_codes             = [
+      + "12345",
+    ]
+  + id                          = (known after apply)
+  + hours                       = "9-5"
+  + name                        = "Cafe 1"
+  + internet_connection         = "YES"
+  + type                        = "cafe"
+
+  + coffee_include {
+      + hot = "yes"
+      + cold    = "yes"
+    }
+  + food_include {
+      + hot = "yes"
+      + cold    = "yes"
+    }
+}
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+Warning: Experimental feature "nitro_cold_brew" is active
+
+on modules/cafe/provider.tf line 9, in terraform:
+9:   experiments = [nitro_cold_brew]
+
+Experimental features are subject to breaking changes in future minor or
+patch releases, based on feedback.
+
+If you have feedback on the design of this feature, please open a GitHub
+issue to discuss it.
+
+(and 89 more similar warnings elsewhere)
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
