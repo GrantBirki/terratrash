@@ -32,9 +32,7 @@ class Terratrash
     initializing_position = terraform_array.index("Initializing plugins and modules...")
 
     # if the line is not found, print a warning
-    if initializing_position.nil?
-      @log.warn("could not find the line 'Initializing plugins and modules...' in the Terraform output")
-    else
+    unless initializing_position.nil?
       # remove all the lines from the array up to that position
       terraform_array.slice!(0..initializing_position)
       # if the very first line is now empty or a newline, remove it as well
