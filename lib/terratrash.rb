@@ -23,11 +23,7 @@ class Terratrash
     terraform_array.delete_if { |item| item.include?("[command]/home/runner/work/") }
 
     # if @remove_pipe_blocks is true, remove any items from the array that include any bits of the following strings
-    if @remove_pipe_blocks
-      terraform_array.delete_if { |item| item.include?("╷") }
-      terraform_array.delete_if { |item| item.include?("│") }
-      terraform_array.delete_if { |item| item.include?("╵") }
-    end
+    terraform_array = remove_pipe_blocks!(terraform_array) if @remove_pipe_blocks
 
     # find what position in the array the line "Initializing plugins and modules..." is at
     initializing_position = terraform_array.index("Initializing plugins and modules...")
@@ -54,6 +50,16 @@ class Terratrash
   end
 
   private
+
+  # Helper function to remove pipe blocks
+  # :input input_array: an array of strings
+  # :return input_array: the same array of strings, but with pipe blocks removed
+  def remove_pipe_blocks!(input_array)
+    input_array.delete_if { |item| item.include?("╷") }
+    input_array.delete_if { |item| item.include?("│") }
+    input_array.delete_if { |item| item.include?("╵") }
+    return input_array
+  end
 
   # Helper function to clean up the top and bottom of the 'output' before it is returned
   # :input text: a string of text
