@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Terratrash
-  def self.todo()
+  def self.todo
     true
   end
 end
