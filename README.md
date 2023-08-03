@@ -35,6 +35,8 @@ cleaned = terratrash.clean(terraform_output)
 puts cleaned
 ```
 
+This Gem has a few extra options you can use:
+
 ```ruby
 # The .new() method accepts a few helpful options
 require "terratrash"
@@ -50,6 +52,8 @@ terratrash = Terratrash.new(
 ```
 
 > This library assumes all newlines characters are `\n` (Unix-style). If you are using Windows-style newlines (`\r\n`), you may need to convert them first.
+
+Additionally, you can call the `.clean!()` method which will never raise an error. If an error occurs, it will return the original input.
 
 Here are some examples of what the inputs and outputs might look like:
 
