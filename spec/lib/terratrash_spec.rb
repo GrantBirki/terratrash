@@ -48,6 +48,18 @@ describe Terratrash do
       expect(terratrash.clean(terraform_cafe_example)).to eq(File.read("#{FIXTURES}/cafe-with-notes.cleaned"))
     end
 
+    it "cleans up a terraform output with the grocery example but it keeps 'warnings'" do
+      terraform_grocery_example = File.read("#{FIXTURES}/grocery-no-changes.output")
+      terratrash = described_class.new(logger: LOGGY, remove_warnings: false)
+      expect(terratrash.clean(terraform_grocery_example)).to eq(File.read("#{FIXTURES}/grocery-with-warnings.cleaned"))
+    end
+
+    it "cleans up a terraform output with the grocery example" do
+      terraform_grocery_example = File.read("#{FIXTURES}/grocery-no-changes.output")
+      terratrash = described_class.new(logger: LOGGY, remove_warnings: true)
+      expect(terratrash.clean(terraform_grocery_example)).to eq(File.read("#{FIXTURES}/grocery.cleaned"))
+    end
+
     it "cleans up simple terraform warning messages" do
       input = <<~HEREDOC
         Warning: This is a warning message.

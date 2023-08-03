@@ -77,8 +77,8 @@ class Terratrash
     text.gsub!(/─{3,}\z/, "")
     # again, remove any trailing newline(s) characters from the end of the string
     text.gsub!(/\n*\z/, "")
-    # if three or more consecutive newline characters are found, replace them with one newline character
-    text.gsub!(/\n{3,}/, "\n")
+    # if three or more consecutive newline characters are found, replace them with two newline characters
+    text.gsub!(/\n{3,}/, "\n\n")
 
     if @add_final_newline && (text[-1] != "\n")
       # if the text does not end with a newline character, add one
