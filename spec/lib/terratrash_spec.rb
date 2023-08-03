@@ -23,6 +23,10 @@ describe Terratrash do
       expect(described_class.new(logger: LOGGY, add_final_newline: false).clean("foo")).to eq("foo")
     end
 
+    it "calls the bang version and does not throw an exception" do
+      expect(described_class.new(logger: LOGGY, add_final_newline: false).clean!("\nfoo")).to eq("foo")
+    end
+
     it "cleans up a terraform output that contains warnings" do
       terraform_with_warnings = File.read("#{FIXTURES}/with-warnings.output")
       terratrash = described_class.new(logger: LOGGY)

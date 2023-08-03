@@ -17,6 +17,25 @@ class Terratrash
     @add_final_newline = add_final_newline # if true, add a newline to the end of the output
   end
 
+  # Like the clean method, but it will never raise an error
+  # If an error is raised, it will return the original input
+  # :param terraform: a string of the terraform output
+  # :return: a string of the cleaned terraform output or the original input
+  def clean!(terraform)
+    return clean(terraform)
+  rescue StandardError => e
+    # :nocov:
+    @log.error("error cleaning terraform output: #{e} - returning original input")
+    @log.error("backtrace: #{e.backtrace.join("\n")}")
+    return terraform
+    # :nocov:
+  end
+
+  # The main method of the terratrash class
+  # This method takes a string, and removes all the unwanted terraform text
+  # The goal of this method is to be left with a minimal, human-readable output
+  # :param terraform: a string of the terraform output
+  # :return: a string of the cleaned terraform output
   def clean(terraform)
     # split the output into an array of lines
     terraform_array = terraform.split("\n")
