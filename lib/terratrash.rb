@@ -3,9 +3,10 @@
 require "logger"
 
 class Terratrash
-  def initialize(logger: nil, remove_warnings: true)
+  def initialize(logger: nil, remove_warnings: true, remove_pipe_blocks: true)
     @log = logger || Logger.new($stdout, level: ENV.fetch("LOG_LEVEL", "INFO").upcase)
     @remove_warnings = remove_warnings # if true, remove terraform warnings
+    @remove_pipe_blocks = remove_pipe_blocks # if true, remove terraform blocks with piped characters
   end
 
   def clean(terraform)
@@ -20,9 +21,8 @@ class Terratrash
     terraform_array.delete_if { |item| item.include?("::debug::") }
     terraform_array.delete_if { |item| item.include?("[command]/home/runner/work/") }
 
-    # terraform warnings often are prefix with piped characters, so remove those if warnings are enabled
-    # disable this if you want to see the warnings or other blocks with piped characters
-    if @remove_warnings
+    # if @remove_pipe_blocks is true, remove any items from the array that include any bits of the following strings
+    if @remove_pipe_blocks
       terraform_array.delete_if { |item| item.include?("╷") }
       terraform_array.delete_if { |item| item.include?("│") }
       terraform_array.delete_if { |item| item.include?("╵") }
@@ -41,23 +41,35 @@ class Terratrash
       terraform_array.delete_at(0) if terraform_array[0].strip == ""
     end
 
-    # re-join the array into a string
-    output = terraform_array.join("\n")
+    # re-join the array into a string (text is what we will call this string)
+    text = terraform_array.join("\n")
+
+    text = remove_warnings!(text) if @remove_warnings
 
     # removing terraform plan -out note
-    output.gsub!(/Note: You didn't use the -out option.*?actions if you run "terraform apply" now./m, "")
+    text.gsub!(/Note: You didn't use the -out option.*?actions if you run "terraform apply" now./m, "")
 
     # remove any leading newline(s) characters from the beginning of the string
-    output.gsub!(/\A\n*/, "")
+    text.gsub!(/\A\n*/, "")
     # remove any trailing newline(s) characters from the end of the string
-    output.gsub!(/\n*\z/, "")
-    # if the output ends with three or more '─' characters, remove them
-    output.gsub!(/─{3,}\z/, "")
+    text.gsub!(/\n*\z/, "")
+    # if the text ends with three or more '─' characters, remove them
+    text.gsub!(/─{3,}\z/, "")
     # again, remove any trailing newline(s) characters from the end of the string
-    output.gsub!(/\n*\z/, "")
+    text.gsub!(/\n*\z/, "")
     # if three or more consecutive newline characters are found, replace them with one newline character
-    output.gsub!(/\n{3,}/, "\n")
+    text.gsub!(/\n{3,}/, "\n")
 
-    return output
+    return text
+  end
+
+  private
+
+  # Helper function to remove Terraform warnings
+  # :input text: a string of text
+  # :return text: the same string of text, but with warnings removed
+  def remove_warnings!(text)
+    text.gsub!(/Warning: Experimental feature.*?similar warnings elsewhere\)/m, "")
+    return text
   end
 end

@@ -29,10 +29,11 @@ describe Terratrash do
       expect(terratrash.clean(terraform_with_warnings)).to eq(File.read("#{FIXTURES}/with-warnings.cleaned").chomp)
     end
 
-    it "cleans up a terraform output that contains warnings but keeps the warnings" do
+    it "cleans up a terraform output with warnings but keeps the pipe block section and warnings" do
       terraform_with_warnings = File.read("#{FIXTURES}/with-warnings.output")
-      terratrash = described_class.new(logger: LOGGY, remove_warnings: false)
-      expect(terratrash.clean(terraform_with_warnings)).to eq(File.read("#{FIXTURES}/with-warnings-kept.cleaned").chomp)
+      terratrash = described_class.new(logger: LOGGY, remove_warnings: false, remove_pipe_blocks: false)
+      expect(terratrash.clean(terraform_with_warnings))
+        .to eq(File.read("#{FIXTURES}/with-pipe-blocks-kept.cleaned").chomp)
     end
   end
 end
