@@ -17,11 +17,16 @@ class Terratrash
     terraform_array.delete_if { |item| item.include?("Refreshing state...") }
     terraform_array.delete_if { |item| item.include?("Read complete") }
     terraform_array.delete_if { |item| item.include?("Still reading...") }
-    terraform_array.delete_if { |item| item.include?("╷") }
-    terraform_array.delete_if { |item| item.include?("│") }
-    terraform_array.delete_if { |item| item.include?("╵") }
     terraform_array.delete_if { |item| item.include?("::debug::") }
     terraform_array.delete_if { |item| item.include?("[command]/home/runner/work/") }
+
+    # terraform warnings often are prefix with piped characters, so remove those if warnings are enabled
+    # disable this if you want to see the warnings or other blocks with piped characters
+    if @warnings
+      terraform_array.delete_if { |item| item.include?("╷") }
+      terraform_array.delete_if { |item| item.include?("│") }
+      terraform_array.delete_if { |item| item.include?("╵") }
+    end
 
     # find what position in the array the line "Initializing plugins and modules..." is at
     initializing_position = terraform_array.index("Initializing plugins and modules...")
@@ -39,8 +44,6 @@ class Terratrash
     # re-join the array into a string
     output = terraform_array.join("\n")
 
-    # removing terraform warnings to clean things up for reviewers
-    output.gsub!(/Warning: Experimental feature.*?similar warnings elsewhere\)/m, "")
     # removing terraform plan -out note
     output.gsub!(/Note: You didn't use the -out option.*?actions if you run "terraform apply" now./m, "")
 
