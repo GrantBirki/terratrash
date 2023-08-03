@@ -1,0 +1,25 @@
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+
+Warning: Experimental feature "basket" is active
+
+on modules/foo/provider.tf line 5, in terraform:
+5:   experiments = [basket]
+
+Experimental features are subject to breaking changes in future minor or
+patch releases, based on feedback.
+
+If you have feedback on the design of this feature, please open a GitHub
+issue to discuss it.
+
+(and 40 more similar warnings elsewhere)
+
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+fruits = "apple"
+milk = "purchased"

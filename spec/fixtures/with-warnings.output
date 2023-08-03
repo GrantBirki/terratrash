@@ -1,0 +1,162 @@
+module.foo.data.bar.cloud: Still reading... [10s elapsed]
+
+Note: Objects have changed outside of Terraform
+
+Terraform detected the following changes made outside of Terraform since the
+last "terraform apply" which may have affected this plan:
+
+  # module.foo["bar"].cloud.computer has changed
+  ~ resource "foo" "bar" {
+        id                         = "123"
+      ~ cloud                    = [
+          + "123",
+        ]
+        # (17 unchanged attributes hidden)
+    }
+
+  # module.bar["foo"].cloud.server has changed
+  ~ resource "bar" "foo" {
+        id                         = "456"
+      ~ members                    = [
+          + "456",
+        ]
+        # (17 unchanged attributes hidden)
+    }
+
+Unless you have made equivalent changes to your configuration, or ignored the
+relevant attributes using ignore_changes, the following plan may include
+actions to undo or respond to these changes.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+# super_computer.THE-SUPER-COMPUTER will be updated in-place
+~ resource "super_computer" "THE-SUPER-COMPUTER" {
+      id                           = "1234567890"
+    ~ tags                         = [
+        - "created_by: the-universe",
+        - "env: production",
+          # (2 unchanged elements hidden)
+      ]
+      # (18 unchanged attributes hidden)
+
+      # (3 unchanged blocks hidden)
+  }
+
+# module.bakery.module.location["new_bakery"].building must be replaced
+-/+ resource "new_bakery" "building" {
+      ~ id                               = "0001" -> (known after apply)
+      ~ name                             = "fresh-cookie-bakery" -> (known after apply)
+      ~ location                         = "Seattle" -> (known after apply)
+      ~ coffee                           = "no" -> "yes" # forces replacement
+      ~ cookies                          = "yes" -> (known after apply)
+      + delete_rude_customers            = (known after apply)
+        # (3 unchanged attributes hidden)
+    }
+
+Plan: 1 to add, 1 to change, 1 to destroy.
+╷
+│ Warning: Argument is deprecated
+│
+│   with foo.bar,
+│   on bakery.tf line 213, in resource "bakery_definition" "building_design":
+│  115:   delete_rude_customers = "yes"
+│
+│ Deprecated in favour of `nuke_rude_customers_from_orbit`
+│
+│ (and one more similar warning elsewhere)
+╵
+╷
+│ Warning: Deprecated Resource
+│
+│   with bar.foo,
+│   on bakery.tf line 14, in resource "bakery" "building":
+│  368: resource "kitchen" "counter" {
+│
+│ The `kettle` resource is deprecated in favour of the:
+│
+│ - `super_kettle`
+│ - `super_duper_kettle`
+│
+│ resources and will be removed in version 2.0 of the Kitchen Provider.
+│
+│
+│ (and 58 more similar warnings elsewhere)
+╵
+╷
+│ Warning: Reference to undefined provider
+│
+│   on cafe.tf line 15, in module "cafe":
+│   15:     cafe = cafe
+│
+│ There is no explicit declaration for local provider name "cafe" in
+│ module.cafe, so Terraform is assuming you mean to pass a configuration for
+│ "hashicorp/cafe".
+│
+│ If you also control the child module, add a required_providers entry named
+│ "cafe" with the source address "hashicorp/cafe".
+│
+│ (and one more similar warning elsewhere)
+╵
+╷
+│ Warning: Experimental feature "bakery_delivery" is active
+│
+│   on modules/directory/provider.tf line 2, in terraform:
+│    2:   experiments = [bakery_delivery]
+│
+│ Experimental features are subject to breaking changes in future minor or
+│ patch releases, based on feedback.
+│
+│ If you have feedback on the design of this feature, please open a GitHub
+│ issue to discuss it.
+│
+│ (and 635 more similar warnings elsewhere)
+╵
+
+bakery.foo: Modifications complete after 0s [id=123]
+bakery.bar.module.kitchen["counter"].building: Destroying... [id=123]
+module.bakery_tf.module.location["Seattle"].place: Destruction complete after 0s
+module.foo.module.bar["baz"].cool.cats: Creating...
+module.apple.module.mango["fruit"].banana.yum: Still creating... [10s elapsed]
+module.cool.module.beans["car"].bus.plane: Still creating... [20s elapsed]
+module.truck.module.delivery["yay"].mail.fun: Creation complete after 21s [id=456]
+╷
+│ Warning: Reference to undefined provider
+│
+│   on bakery.tf line 38, in module "coffee":
+│   38:     coffee = coffee
+│
+│ There is no explicit declaration for local provider name "coffee" in
+│ module.coffee, so Terraform is assuming you mean to pass a configuration for
+│ "hashicorp/coffee".
+│
+│ If you also control the child module, add a required_providers entry named
+│ "coffee" with the source address "hashicorp/coffee".
+│
+│ (and one more similar warning elsewhere)
+╵
+╷
+│ Warning: Experimental feature "flying_cats" is active
+│
+│   on modules/directory/provider.tf line 2, in terraform:
+│    2:   experiments = [flying_cats]
+│
+│ Experimental features are subject to breaking changes in future minor or
+│ patch releases, based on feedback.
+│
+│ If you have feedback on the design of this feature, please open a GitHub
+│ issue to discuss it.
+│
+│ (and 645 more similar warnings elsewhere)
+╵
+
+Apply complete! Resources: 1 added, 1 changed, 1 destroyed.
+::debug::Terraform exited with code 0.
+::debug::stderr: 
+::debug::exitcode: 0
