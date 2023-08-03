@@ -67,7 +67,7 @@ class Terratrash
   # :input text: a string of text
   # :return text: the same string of text, but with warnings removed
   def remove_warnings!(text)
-    text.gsub!(/Warning: Experimental feature.*?similar warnings elsewhere\)/m, "")
+    text.gsub!(/Warning:.*?similar warnings elsewhere\)/m, "")
     return text
   end
 end
