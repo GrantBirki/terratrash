@@ -6,6 +6,7 @@ require_relative "../../lib/terratrash"
 
 # a mock logger that doesn't output anything
 LOGGY = Logger.new($stdout, level: "fatal")
+FIXTURES = "spec/fixtures"
 
 describe Terratrash do
   context "#initialize" do
@@ -20,6 +21,12 @@ describe Terratrash do
   context "#clean" do
     it "makes no changes to a very simple string" do
       expect(described_class.new(logger: LOGGY).clean("foo")).to eq("foo")
+    end
+
+    it "cleans up a terraform output that contains warnings" do
+      terraform_with_warnings = File.read("#{FIXTURES}/with-warnings.output")
+      terratrash = described_class.new(logger: LOGGY)
+      expect(terratrash.clean(terraform_with_warnings)).to eq(File.read("#{FIXTURES}/with-warnings.cleaned"))
     end
   end
 end
