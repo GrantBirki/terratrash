@@ -12,4 +12,10 @@ describe Terratrash do
       expect(terratrash.instance_variable_get(:@log)).to be_a(Logger)
     end
   end
+
+  context "#clean" do
+    it "makes no changes to a very simple string" do
+      expect(described_class.new.clean("foo")).to eq("foo")
+    end
+  end
 end
