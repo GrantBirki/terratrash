@@ -22,14 +22,10 @@ class Terratrash
     terraform_array = terraform.split("\n")
 
     # remove any items from the array that include any bits of the following strings
-    terraform_array.delete_if { |item| item.include?("Reading...") }
-    terraform_array.delete_if { |item| item.include?("Refreshing state...") }
-    terraform_array.delete_if { |item| item.include?("Read complete") }
-    terraform_array.delete_if { |item| item.include?("Still reading...") }
-    terraform_array.delete_if { |item| item.include?("::debug::") }
-    terraform_array.delete_if { |item| item.include?("[command]/home/runner/work/") }
+    terraform_array = remove_terraform_loading_messages!(terraform_array)
+    terraform_array = remove_github_actions_output!(terraform_array)
 
-    # if @remove_pipe_blocks is true, remove any items from the array that include any bits of the following strings
+    # if @remove_pipe_blocks is true, remove any items from the array that include pipes
     terraform_array = remove_pipe_blocks!(terraform_array) if @remove_pipe_blocks
 
     # find what position in the array the line "Initializing plugins and modules..." is at
@@ -46,14 +42,37 @@ class Terratrash
     # re-join the array into a string (text is what we will call this string)
     text = terraform_array.join("\n")
 
+    # terraform warnings and notes cleanup
     text = remove_warnings!(text) if @remove_warnings
     text = remove_notes!(text) if @remove_notes
+
+    # whitespace cleanup
     text = top_and_bottom_cleanup!(text)
 
     return text
   end
 
   private
+
+  # Helper function to remove GitHub Actions output / debug messages
+  # :input input_array: an array of strings
+  # :return input_array: the same array of strings, but with GitHub Actions output removed
+  def remove_github_actions_output!(input_array)
+    input_array.delete_if { |item| item.include?("::debug::") }
+    input_array.delete_if { |item| item.include?("[command]/home/runner/work/") }
+    return input_array
+  end
+
+  # Helper function to remove Terraform loading messages
+  # :input input_array: an array of strings
+  # :return input_array: the same array of strings, but with loading messages removed
+  def remove_terraform_loading_messages!(input_array)
+    input_array.delete_if { |item| item.include?("Reading...") }
+    input_array.delete_if { |item| item.include?("Refreshing state...") }
+    input_array.delete_if { |item| item.include?("Read complete") }
+    input_array.delete_if { |item| item.include?("Still reading...") }
+    return input_array
+  end
 
   # Helper function to remove pipe blocks
   # :input input_array: an array of strings
