@@ -26,7 +26,7 @@ describe Terratrash do
     it "cleans up a terraform output that contains warnings" do
       terraform_with_warnings = File.read("#{FIXTURES}/with-warnings.output")
       terratrash = described_class.new(logger: LOGGY)
-      expect(terratrash.clean(terraform_with_warnings)).to eq(File.read("#{FIXTURES}/with-warnings.cleaned"))
+      expect(terratrash.clean(terraform_with_warnings)).to eq(File.read("#{FIXTURES}/with-warnings.cleaned").chomp)
     end
   end
 end
