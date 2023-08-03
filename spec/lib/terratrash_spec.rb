@@ -35,5 +35,11 @@ describe Terratrash do
       expect(terratrash.clean(terraform_with_warnings))
         .to eq(File.read("#{FIXTURES}/with-pipe-blocks-kept.cleaned").chomp)
     end
+
+    it "cleans up a terraform output with the cafe example" do
+      terraform_cafe_example = File.read("#{FIXTURES}/cafe.output")
+      terratrash = described_class.new(logger: LOGGY)
+      expect(terratrash.clean(terraform_cafe_example)).to eq(File.read("#{FIXTURES}/cafe.cleaned").chomp)
+    end
   end
 end
