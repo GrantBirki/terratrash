@@ -1,5 +1,3 @@
-module.foo.data.bar.cloud: Still reading... [10s elapsed]
-
 Note: Objects have changed outside of Terraform
 
 Terraform detected the following changes made outside of Terraform since the
@@ -157,6 +155,3 @@ module.truck.module.delivery["yay"].mail.fun: Creation complete after 21s [id=45
 ╵
 
 Apply complete! Resources: 1 added, 1 changed, 1 destroyed.
-::debug::Terraform exited with code 0.
-::debug::stderr: 
-::debug::exitcode: 0

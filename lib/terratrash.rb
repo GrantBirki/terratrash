@@ -3,9 +3,9 @@
 require "logger"
 
 class Terratrash
-  def initialize(logger: nil, warnings: true)
+  def initialize(logger: nil, remove_warnings: true)
     @log = logger || Logger.new($stdout, level: ENV.fetch("LOG_LEVEL", "INFO").upcase)
-    @warnings = warnings # if true, remove terraform warnings
+    @remove_warnings = remove_warnings # if true, remove terraform warnings
   end
 
   def clean(terraform)
@@ -22,7 +22,7 @@ class Terratrash
 
     # terraform warnings often are prefix with piped characters, so remove those if warnings are enabled
     # disable this if you want to see the warnings or other blocks with piped characters
-    if @warnings
+    if @remove_warnings
       terraform_array.delete_if { |item| item.include?("╷") }
       terraform_array.delete_if { |item| item.include?("│") }
       terraform_array.delete_if { |item| item.include?("╵") }
