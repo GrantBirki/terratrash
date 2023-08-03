@@ -58,6 +58,7 @@ class Terratrash
   # :input input_array: an array of strings
   # :return input_array: the same array of strings, but with GitHub Actions output removed
   def remove_github_actions_output!(input_array)
+    @log.debug("removing GitHub Actions output")
     input_array.delete_if { |item| item.include?("::debug::") }
     input_array.delete_if { |item| item.include?("[command]/home/runner/work/") }
     return input_array
@@ -67,6 +68,7 @@ class Terratrash
   # :input input_array: an array of strings
   # :return input_array: the same array of strings, but with loading messages removed
   def remove_terraform_loading_messages!(input_array)
+    @log.debug("removing Terraform 'loading' messages")
     input_array.delete_if { |item| item.include?("Reading...") }
     input_array.delete_if { |item| item.include?("Refreshing state...") }
     input_array.delete_if { |item| item.include?("Read complete") }
@@ -78,6 +80,7 @@ class Terratrash
   # :input input_array: an array of strings
   # :return input_array: the same array of strings, but with pipe blocks removed
   def remove_pipe_blocks!(input_array)
+    @log.debug("removing pipe blocks")
     input_array.delete_if { |item| item.include?("╷") }
     input_array.delete_if { |item| item.include?("│") }
     input_array.delete_if { |item| item.include?("╵") }
@@ -88,6 +91,7 @@ class Terratrash
   # :input text: a string of text
   # :return text: the same string of text, but with the top and bottom cleaned up
   def top_and_bottom_cleanup!(text)
+    @log.debug("cleaning up the top and bottom of the output")
     # remove any leading newline(s) characters from the beginning of the string
     text.gsub!(/\A\n*/, "")
     # remove any trailing newline(s) characters from the end of the string
@@ -111,6 +115,7 @@ class Terratrash
   # :input text: a string of text
   # :return text: the same string of text, but with notes removed
   def remove_notes!(text)
+    @log.debug("removing Terraform 'notes'")
     # removing terraform plan -out note
     text.gsub!(/Note: You didn't use the -out option.*?actions if you run "terraform apply" now./m, "")
     return text
@@ -120,6 +125,7 @@ class Terratrash
   # :input text: a string of text
   # :return text: the same string of text, but with warnings removed
   def remove_warnings!(text)
+    @log.debug("removing Terraform 'warnings'")
     text.gsub!(/Warning:.*?similar warnings elsewhere\)/m, "")
     return text
   end
