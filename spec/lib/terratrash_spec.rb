@@ -42,6 +42,12 @@ describe Terratrash do
       expect(terratrash.clean(terraform_cafe_example)).to eq(File.read("#{FIXTURES}/cafe.cleaned"))
     end
 
+    it "cleans up a terraform output with the cafe example but it keeps 'notes'" do
+      terraform_cafe_example = File.read("#{FIXTURES}/cafe.output")
+      terratrash = described_class.new(logger: LOGGY, remove_notes: false)
+      expect(terratrash.clean(terraform_cafe_example)).to eq(File.read("#{FIXTURES}/cafe-with-notes.cleaned"))
+    end
+
     it "cleans up simple terraform warning messages" do
       input = <<~HEREDOC
         Warning: This is a warning message.

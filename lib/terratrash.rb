@@ -3,9 +3,16 @@
 require "logger"
 
 class Terratrash
-  def initialize(logger: nil, remove_warnings: true, remove_pipe_blocks: true, add_final_newline: true)
+  def initialize(
+    logger: nil,
+    remove_warnings: true,
+    remove_notes: true,
+    remove_pipe_blocks: true,
+    add_final_newline: true
+  )
     @log = logger || Logger.new($stdout, level: ENV.fetch("LOG_LEVEL", "INFO").upcase)
     @remove_warnings = remove_warnings # if true, remove terraform warnings
+    @remove_notes = remove_notes # if true, remove terraform notes
     @remove_pipe_blocks = remove_pipe_blocks # if true, remove terraform blocks with piped characters
     @add_final_newline = add_final_newline # if true, add a newline to the end of the output
   end
@@ -40,10 +47,7 @@ class Terratrash
     text = terraform_array.join("\n")
 
     text = remove_warnings!(text) if @remove_warnings
-
-    # removing terraform plan -out note
-    text.gsub!(/Note: You didn't use the -out option.*?actions if you run "terraform apply" now./m, "")
-
+    text = remove_notes!(text) if @remove_notes
     text = top_and_bottom_cleanup!(text)
 
     return text
@@ -81,6 +85,15 @@ class Terratrash
       text += "\n"
     end
 
+    return text
+  end
+
+  # Helper function to remove Terraform notes
+  # :input text: a string of text
+  # :return text: the same string of text, but with notes removed
+  def remove_notes!(text)
+    # removing terraform plan -out note
+    text.gsub!(/Note: You didn't use the -out option.*?actions if you run "terraform apply" now./m, "")
     return text
   end
 
