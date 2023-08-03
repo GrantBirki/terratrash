@@ -3,10 +3,11 @@
 require "logger"
 
 class Terratrash
-  def initialize(logger: nil, remove_warnings: true, remove_pipe_blocks: true)
+  def initialize(logger: nil, remove_warnings: true, remove_pipe_blocks: true, add_final_newline: true)
     @log = logger || Logger.new($stdout, level: ENV.fetch("LOG_LEVEL", "INFO").upcase)
     @remove_warnings = remove_warnings # if true, remove terraform warnings
     @remove_pipe_blocks = remove_pipe_blocks # if true, remove terraform blocks with piped characters
+    @add_final_newline = add_final_newline # if true, add a newline to the end of the output
   end
 
   def clean(terraform)
@@ -68,6 +69,11 @@ class Terratrash
     text.gsub!(/\n*\z/, "")
     # if three or more consecutive newline characters are found, replace them with one newline character
     text.gsub!(/\n{3,}/, "\n")
+
+    if @add_final_newline && (text[-1] != "\n")
+      # if the text does not end with a newline character, add one
+      text += "\n"
+    end
 
     return text
   end
