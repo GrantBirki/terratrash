@@ -3,8 +3,9 @@
 require "logger"
 
 class Terratrash
-  def initialize(logger: nil)
+  def initialize(logger: nil, warnings: true)
     @log = logger || Logger.new($stdout, level: ENV.fetch("LOG_LEVEL", "INFO").upcase)
+    @warnings = warnings # if true, remove terraform warnings
   end
 
   def clean(terraform)
@@ -22,23 +23,17 @@ class Terratrash
     terraform_array.delete_if { |item| item.include?("::debug::") }
     terraform_array.delete_if { |item| item.include?("[command]/home/runner/work/") }
 
-    begin
-      # find what position in the array the line "Initializing plugins and modules..." is at
-      initializing_position = terraform_array.index("Initializing plugins and modules...")
+    # find what position in the array the line "Initializing plugins and modules..." is at
+    initializing_position = terraform_array.index("Initializing plugins and modules...")
 
-      # if the line is not found, print a warning
-      if initializing_position.nil?
-        puts "Warning: Could not find the line 'Initializing plugins and modules...' in the Terraform output"
-      else
-        # remove all the lines from the array up to that position
-        terraform_array.slice!(0..initializing_position)
-        # if the very first line is now empty or a newline, remove it as well
-        terraform_array.delete_at(0) if terraform_array[0].strip == ""
-      end
-    rescue StandardError => e
-      puts "Warning: #{e}"
-      puts "Could not find the line 'Initializing plugins and modules...' in the Terraform output"
-      puts "moving on..."
+    # if the line is not found, print a warning
+    if initializing_position.nil?
+      @log.warn("could not find the line 'Initializing plugins and modules...' in the Terraform output")
+    else
+      # remove all the lines from the array up to that position
+      terraform_array.slice!(0..initializing_position)
+      # if the very first line is now empty or a newline, remove it as well
+      terraform_array.delete_at(0) if terraform_array[0].strip == ""
     end
 
     # re-join the array into a string
