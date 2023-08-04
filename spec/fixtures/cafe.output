@@ -1,4 +1,19 @@
 [command]/home/runner/work/_temp/123-546-789/terraform-bin plan -no-color
+module.foo.data.bar.cloud: Still reading... [10s elapsed]
+module.foo.data.bar.cloud: Still reading... [20s elapsed]
+module.foo.data.bar.cloud: Still reading... [30s elapsed]
+module.foo.data.bar.cloud: Still reading... [40s elapsed]
+module.foo.data.bar.cloud: Still reading... [50s elapsed]
+module.foo.data.bar.cloud: Still reading... [60s elapsed]
+module.foo.data.bar.cloud: Still reading... [70s elapsed]
+module.foo.data.bar.cloud: Still reading... [80s elapsed]
+module.foo.data.bar.cloud: Still reading... [90s elapsed]
+module.foo.data.bar.cloud: Still reading... [100s elapsed]
+module.foo.data.bar.cloud: Still reading... [110s elapsed]
+module.foo.data.bar.cloud: Still reading... [120s elapsed]
+module.foo.data.bar.cloud: Still reading... [130s elapsed]
+module.foo.data.bar.cloud: Still reading... [140s elapsed]
+module.foo.data.bar.cloud: Still reading... [150s elapsed]
 
 Blah blah blah
 
