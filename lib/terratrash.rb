@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "logger"
+require "redacting_logger"
 
 class Terratrash
   def initialize(
@@ -10,7 +10,7 @@ class Terratrash
     remove_pipe_blocks: true,
     add_final_newline: true
   )
-    @log = logger || Logger.new($stdout, level: ENV.fetch("LOG_LEVEL", "INFO").upcase)
+    @log = logger || setup_logger
     @remove_warnings = remove_warnings # if true, remove terraform warnings
     @remove_notes = remove_notes # if true, remove terraform notes
     @remove_pipe_blocks = remove_pipe_blocks # if true, remove terraform blocks with piped characters
@@ -72,6 +72,19 @@ class Terratrash
   end
 
   private
+
+  # Private class method to setup a redacting logger
+  # :return: a redacting logger
+  def setup_logger
+    $stdout.sync = true # don't buffer - flush immediately
+    RedactingLogger.new(
+      $stdout, # The device to log to (defaults to $stdout if not provided)
+      # redact_patterns: [],
+      level: ENV.fetch("LOG_LEVEL", "INFO").upcase, # The log level to use
+      redacted_msg: "[REDACTED]", # The message to replace the redacted patterns with
+      use_default_patterns: true # Whether to use the default built-in patterns or not
+    )
+  end
 
   # Helper function to remove GitHub Actions output / debug messages
   # :input input_array: an array of strings
