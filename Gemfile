@@ -2,6 +2,8 @@
 
 source "https://rubygems.org"
 
+gem "redacting-logger", "~> 1.0"
+
 group :development do
   gem "rspec", "~> 3.12"
   gem "rubocop", "~> 1.48"
