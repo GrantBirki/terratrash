@@ -121,7 +121,7 @@ DEPENDENCIES
   rubocop-github (~> 0.20)
   rubocop-performance (~> 1.16)
   rubocop-rspec (~> 2.22)
-  ruby-lsp (~> 0.13)
+  ruby-lsp (~> 0.14)
   simplecov (~> 0.22)
   simplecov-erb (~> 1.0)
 
