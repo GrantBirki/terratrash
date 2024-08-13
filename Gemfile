@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "redacting-logger", "~> 1.2"
+gem "redacting-logger", "~> 1.4"
 
 group :development do
   gem "rspec", "~> 3.12"
