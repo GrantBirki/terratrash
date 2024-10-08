@@ -110,4 +110,4 @@ DEPENDENCIES
   simplecov-erb (~> 1.0)
 
 BUNDLED WITH
-   2.4.12
+   2.5.16
