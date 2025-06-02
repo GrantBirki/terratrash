@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gem "redacting-logger", "~> 1.4"
 
 group :development do
-  gem "rspec", "~> 3.12"
+  gem "rspec", "~> 3.13"
   gem "rubocop", "~> 1.75"
   gem "rubocop-github", "~> 0.23"
   gem "rubocop-performance", "~> 1.25"
