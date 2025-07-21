@@ -6,7 +6,7 @@ gem "redacting-logger", "~> 1.4"
 
 group :development do
   gem "rspec", "~> 3.13"
-  gem "rubocop", "~> 1.75"
+  gem "rubocop", "~> 1.78"
   gem "rubocop-github", "~> 0.23"
   gem "rubocop-performance", "~> 1.25"
   gem "rubocop-rspec", "~> 3.6"
