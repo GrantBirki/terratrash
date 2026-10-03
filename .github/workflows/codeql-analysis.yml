@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [ main ]
 
+cache-mode: none
+
 jobs:
   analyze:
     name: Analyze
