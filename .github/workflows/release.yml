@@ -12,6 +12,8 @@ permissions:
   contents: write
   packages: write
 
+cache-mode: none
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -22,7 +24,13 @@ jobs:
 
       - uses: ruby/setup-ruby@0481980f17b760ef6bca5e8c55809102a0af1e5a # pin@v1.263.0
         with:
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: install dependencies
+        run: |
+          bundle config set --local path "$PWD/vendor/bundle"
+          bundle config set --local deployment true
+          bundle install --jobs 4
 
       - name: bootstrap
         run: script/bootstrap
